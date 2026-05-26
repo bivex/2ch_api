@@ -17,11 +17,13 @@ async def list_top_threads(board: str, limit: int, sort: str):
         threads = await service.get_top_threads(board, limit, sort)
         print(f"\n{'#'*10} TOP THREADS ON /{board}/ {'#'*10}")
         for i, t in enumerate(threads, 1):
-            subject = t.subject if t.subject else strip_html(t.op_post.comment)[:60] + "..."
+            subject = t.subject if t.subject else "No subject"
+            full_content = strip_html(t.op_post.comment)
             print(f"{i}. [{t.posts_count} posts] ID: {t.id}")
             print(f"   Subject: {subject}")
-            print(f"   Last Activity: {t.last_hit}")
-            print("-" * 40)
+            print(f"\n{full_content}")
+            print(f"\n   Last Activity: {t.last_hit}")
+            print("-" * 60)
     finally:
         await client.close()
 
