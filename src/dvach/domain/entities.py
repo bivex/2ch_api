@@ -37,6 +37,7 @@ class Thread:
     op_post: Post
     posts_count: int
     files_count: int
+    last_hit: datetime
     subject: Optional[str] = None
 
 @dataclass(frozen=True)

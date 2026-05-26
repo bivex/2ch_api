@@ -45,6 +45,7 @@ class DvachClient(I2chClient):
                 op_post=self._map_post(t),
                 posts_count=t.get("posts_count", 0),
                 files_count=t.get("files_count", 0),
+                last_hit=datetime.fromtimestamp(t.get("lasthit", t["timestamp"])),
                 subject=t.get("subject")
             ))
         return threads
