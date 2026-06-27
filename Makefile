@@ -21,6 +21,9 @@ read:
 		export PYTHONPATH=src && ./venv/bin/python3 src/read_thread.py $(board) $(thread) $(if $(limit),--limit $(limit)); \
 	fi
 
+gd:
+	export PYTHONPATH=src && ./venv/bin/python3 src/monitor_gd.py $(if $(limit),--limit $(limit)) $(if $(sort),--sort $(sort)) $(if $(keywords),--keywords $(keywords))
+
 top:
 	@if [ -z "$(board)" ]; then \
 		echo "Usage: make top board=po limit=5 sort=posts"; \
