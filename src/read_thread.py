@@ -13,8 +13,8 @@ class MLStripper(HTMLParser):
         self.reset()
         self.fed = []
 
-    def handle_data(self, d):
-        self.fed.append(d)
+    def handle_data(self, data):
+        self.fed.append(data)
 
     def get_data(self):
         return "".join(self.fed)
