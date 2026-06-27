@@ -5,7 +5,18 @@ from loguru import logger
 from dvach.infrastructure.client import DvachClient
 from dvach.application.watcher import ThreadWatcher
 from dvach.application.board_service import BoardService
+from dvach.application.ukraine_monitor import UkraineMonitor
 from dvach.shared.utils import strip_html
+
+async def run_ukraine_monitor():
+    client = DvachClient()
+    monitor = UkraineMonitor(client)
+    try:
+        await monitor.start()
+    except KeyboardInterrupt:
+        monitor.stop()
+    finally:
+        await client.close()
 
 async def list_top_threads(board: str, limit: int, sort: str):
     client = DvachClient()
@@ -60,12 +71,17 @@ def main():
     top_parser.add_argument("--limit", type=int, default=10, help="Number of threads")
     top_parser.add_argument("--sort", choices=["posts", "creation", "activity"], default="posts", help="Sorting criteria")
 
+    # Digest command
+    subparsers.add_parser("digest", help="Start hourly Ukraine news monitor")
+
     args = parser.parse_args()
 
     if args.command == "watch":
         asyncio.run(watch_thread(args.board, args.thread))
     elif args.command == "top":
         asyncio.run(list_top_threads(args.board, args.limit, args.sort))
+    elif args.command == "digest":
+        asyncio.run(run_ukraine_monitor())
     else:
         parser.print_help()
 
